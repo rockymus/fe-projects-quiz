@@ -1,0 +1,126 @@
+
+*{
+  box-sizing: border-box;
+}
+body {
+  font-family: "Karla", sans-serif;
+  background-color: #F5F7FB;
+  color: #293264;
+  margin: 0;
+  padding: 0 40px;
+}
+
+
+.start-quiz-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.start-quiz-container>h1 {
+  font-size: 1.953 rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+button {
+  border: none;
+  font-family: "Karla", sans-serif;
+  cursor: pointer;
+
+}
+
+.start-quiz-container button, .questions-container .submit-button {
+  background-color: #4D5B9E;
+  font-size: 1rem;
+  padding: 1em 2em;
+  border-radius: 15px;
+  color: #F5F7FB;
+}
+
+.questions-container {
+  margin: 2em auto;
+  max-width: 800px;
+}
+
+section.question button {
+  font-size: 1rem;
+  border-radius: 7.71px;
+  padding: 0.3em 1em;
+  border: 1px solid #4D5B9E;
+  background-color: #F5F7FB;
+  display: flex;
+  min-width: fit-content;
+
+}
+
+section.question button:hover {
+  transform: scale(1.05);
+}
+
+section.question > .answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+
+}
+
+hr {
+  border: 1px solid #DBDEF0;
+  margin: 15px 0;
+}
+
+section.question .answer-selected {
+  background-color: #D6DBF5;
+  border: 1px solid #D6DBF5;
+}
+
+section.question .answer-correct {
+  background-color: #94D7A2;
+  border: none;
+}
+
+section.question .answer-wrong {
+  background-color: #F8BCBC;
+  opacity: 0.6;
+  border: none;
+}
+
+div.questions-container .submit-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.results {
+  text-align: center;
+  margin: 2em 0;
+}
+
+.results .score {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5em;
+}
+
+.loader {
+  display: none;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;  /* Half of height */
+  margin-left: -60px; /* Half of width */
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
