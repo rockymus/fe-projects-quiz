@@ -1,76 +1,104 @@
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import he from 'he';
 import Question from "./components/Question"
+import StartScreen from "./components/StartScreen"
+import LoadingSpinner from "./components/LoadingSpinner"
 
 export default function App() {
+  const [quizState, setQuizState] = useState('start') // 'start', 'loading', 'playing', 'finished'
   const [questions, setQuestions] = useState([])
-  const startContainer = useRef(null)
-  const submitBtn = useRef(null)
-  const loader = useRef(null)
-  const mainContainer = useRef(null)
-
-  const [gameOver, setGameOver] = useState(false)
+  const [error, setError] = useState(null)
 
   function selectAnswer(question) {
-    const currentQuestionState = questions.find(q => q.questionNumber === question.questionNumber)
-    setQuestions(prevQuestions => prevQuestions.map(q => q.questionNumber === question.questionNumber ? { ...currentQuestionState, answer: question.answer } : q))
+    setQuestions(prevQuestions => 
+      prevQuestions.map(q => 
+        q.questionNumber === question.questionNumber 
+          ? { ...q, answer: question.answer } 
+          : q
+      )
+    )
   }
 
-
-  async function updateQuestions() {
-    loader.current.style.display = "block"
-    mainContainer.current.style.display = "none"
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'text/plain; charset=UTF-8')
-    const res = await fetch("https://opentdb.com/api.php?amount=10")
-    const data = await res.json()
-    setQuestions(data.results.map((question, index) => ({
-      questionNumber: index + 1,
-      question: he.decode(question.question),
-      correctAnswer: he.decode(question.correct_answer),
-      incorrectAnswers: question.incorrect_answers.map(ans => he.decode(ans)),
-      answers: [he.decode(question.correct_answer), ...question.incorrect_answers.map(ans => he.decode(ans))].sort(() => Math.random() - 0.5),
-      answer: undefined
-    })))
-    startContainer.current.style.display = "none"
-    loader.current.style.display = "none"
-    mainContainer.current.style.display = "block"
+  async function startQuiz() {
+    setQuizState('loading')
+    setError(null)
+    
+    try {
+      const res = await fetch("https://opentdb.com/api.php?amount=10")
+      
+      if (!res.ok) {
+        throw new Error('Failed to fetch questions')
+      }
+      
+      const data = await res.json()
+      
+      setQuestions(data.results.map((question, index) => ({
+        questionNumber: index + 1,
+        question: he.decode(question.question),
+        correctAnswer: he.decode(question.correct_answer),
+        incorrectAnswers: question.incorrect_answers.map(ans => he.decode(ans)),
+        answers: [
+          he.decode(question.correct_answer), 
+          ...question.incorrect_answers.map(ans => he.decode(ans))
+        ].sort(() => Math.random() - 0.5),
+        answer: undefined
+      })))
+      
+      setQuizState('playing')
+    } catch (err) {
+      setError(err.message)
+      setQuizState('start')
+    }
   }
 
-  function checkAnswers() {
-    if (gameOver) {
-      setGameOver(false)
-      updateQuestions()
-      submitBtn.current.textContent = "Check answers"
-
+  function handleSubmit() {
+    if (quizState === 'finished') {
+      // Start a new game
+      startQuiz()
+    } else if (questions.every(question => question.answer)) {
+      // Check answers
+      setQuizState('finished')
     }
-    else if (questions.every((question) => question.answer)) {
-      submitBtn.current.textContent = "New game"
+  }
 
-      console.log(submitBtn.current.textContent)
-      setGameOver(true)
-    }
+  const calculateScore = () => {
+    return questions.filter(q => q.answer === q.correctAnswer).length
   }
 
   const questionElements = questions.map((question) =>
-    <Question key={question.questionNumber} question={question} selectAnswer={selectAnswer} gameOver={gameOver} />
+    <Question 
+      key={question.questionNumber} 
+      question={question} 
+      selectAnswer={selectAnswer} 
+      gameOver={quizState === 'finished'} 
+    />
   )
 
   return (
     <main>
-      <div ref={loader} class="loader"></div>
-      <div ref={mainContainer}>
-        <div className="start-quiz-container" ref={startContainer}>
-          <h1>Quizzical</h1>
-          <p>Can you answer all the questions?</p>
-          <button onClick={updateQuestions}>Start quiz</button>
-        </div>
+      {quizState === 'loading' && <LoadingSpinner />}
+
+      {quizState === 'start' && (
+        <StartScreen onStart={startQuiz} error={error} />
+      )}
+
+      {(quizState === 'playing' || quizState === 'finished') && (
         <div className="questions-container">
           {questionElements}
-          {questions.length != 0 && <button ref={submitBtn} onClick={checkAnswers} className="submit-button">Check answers</button>}
+          {questions.length > 0 && (
+            <div style={{ textAlign: 'center' }}>
+              <button onClick={handleSubmit} className="submit-button">
+                {quizState === 'finished' ? 'Play again' : 'Check answers'}
+              </button>
+              {quizState === 'finished' && (
+                <p className="score">
+                  You scored {calculateScore()}/{questions.length} correct answers
+                </p>
+              )}
+            </div>
+          )}
         </div>
-      </div>
-
+      )}
     </main>
   )
 }
