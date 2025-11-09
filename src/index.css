@@ -33,7 +33,7 @@ button {
 
 }
 
-.start-quiz-container button, .questions-container .submit-button {
+.start-quiz-container button, button.submit-button {
   background-color: #4D5B9E;
   font-size: 1rem;
   padding: 1em 2em;
@@ -121,4 +121,28 @@ div.questions-container > p {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2em;
+}
+
+.error-container h2 {
+  color: #D32F2F;
+  margin-bottom: 1em;
+}
+
+.error-container p {
+  color: #293264;
+  font-size: 1.1rem;
+  margin-bottom: 2em;
+  line-height: 1.6;
 }
