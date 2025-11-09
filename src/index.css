@@ -94,15 +94,14 @@ div.questions-container .submit-button {
   margin: 0 auto;
 }
 
-.score {
-  font-size: 1.25rem;
+div.questions-container > p {
+  text-align: center;
+  font-size: 1.6em;
   font-weight: 700;
   margin-top: 1em;
-  color: #293264;
 }
 
 .loader {
-  display: block;
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
