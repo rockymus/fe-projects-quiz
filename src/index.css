@@ -94,19 +94,15 @@ div.questions-container .submit-button {
   margin: 0 auto;
 }
 
-.results {
-  text-align: center;
-  margin: 2em 0;
-}
-
-.results .score {
-  font-size: 1.2rem;
+.score {
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1.5em;
+  margin-top: 1em;
+  color: #293264;
 }
 
 .loader {
-  display: none;
+  display: block;
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
   border-radius: 50%;
