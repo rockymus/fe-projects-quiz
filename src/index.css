@@ -81,12 +81,15 @@ section.question .answer-selected {
 section.question .answer-correct {
   background-color: #94D7A2;
   border: none;
+  transition: background-color 500ms linear;
+
 }
 
 section.question .answer-wrong {
   background-color: #F8BCBC;
   opacity: 0.6;
   border: none;
+  transition: background-color 500ms linear;
 }
 
 div.questions-container .submit-button {
