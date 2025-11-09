@@ -1,10 +1,9 @@
-export default function StartScreen({ onStart, error }) {
-  return (
-    <div className="start-quiz-container">
-      <h1>Quizzical</h1>
-      <p>Can you answer all the questions?</p>
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <button onClick={onStart}>Start quiz</button>
-    </div>
-  )
+export default function StartScreen({startGame}) {
+    return (
+        <div className="start-quiz-container">
+          <h1>Quizzical</h1>
+          <p>Can you answer all the questions?</p>
+          <button onClick={() => startGame()}>Start quiz</button>
+        </div>
+    )
 }

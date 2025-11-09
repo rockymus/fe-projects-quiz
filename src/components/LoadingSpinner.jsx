@@ -1,3 +1,3 @@
 export default function LoadingSpinner() {
-  return <div className="loader"></div>
+    return <div className={"loader"}></div>
 }
